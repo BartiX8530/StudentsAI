@@ -77,7 +77,7 @@ y_pred = model.predict(X_test_scaled)
 mse_nn = mean_squared_error(y_test, y_pred)
 # print(f'Neural Network Mean Squared Error: {mse_nn}')
 
-#                        Baseline models for comparison
+#                         Baseline models for comparison
 # The baseline models help us understand how well our model performs compared to simpler models.
 # We will use a Linear Regression model and a Decision Tree model as baselines -
 # Linear Regression is the model we used to select features
