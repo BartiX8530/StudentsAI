@@ -70,7 +70,7 @@ grid = GridSearchCV(estimator=model, param_grid=param_grid, n_jobs=-1, cv=3)
 # Fit the model
 grid_result = grid.fit(X_train_scaled, y_train)
 
-# Print the best parameters and score
+# Print the best parameters and score found
 print(f"Best parameters: {grid_result.best_params_}")
 print(f"Best score: {grid_result.best_score_}")
 
