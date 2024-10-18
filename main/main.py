@@ -54,7 +54,6 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train_selected)
 X_test_scaled = scaler.transform(X_test_selected)
 
-# Old way of building the model --
 # Build the neural network model with L2 regularization to prevent overfitting (penalize large weights)
 # model = Sequential()
 # Add layers to the model, with the first layer specifying the input dimension
@@ -109,6 +108,9 @@ print(f'Neural Network finished model Mean Squared Error: {mse_nn}')
 
 # Extract the first six numbers after the decimal place for our naming convention
 mse_str = f"{mse_nn:.6f}".split('.')[1]
+
+# Format the filename
+filename = f"finishedmodel_{mse_str}.h5"
 
 ### predicting the GPA of a student based on the input values
 # our input values are going to be '18' - Study time weekly, '60' - absences, '1' - Tutoring, '1' - ParentalSupport, '0' - Extracurricular, '1' - Sports, '0' - Music

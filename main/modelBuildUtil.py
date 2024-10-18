@@ -1,8 +1,8 @@
-# main/modelBuildUtil.py
-
 # this file is used for simplifying the model definitions in other files, and to make them
 # easier to use. The function build_model() is used to create a Sequential model with the
 # specified parameters, and returns the model, batch size, and number of epochs.
+
+# main/modelBuildUtil.py
 
 import tensorflow as tf
 from tensorflow.keras.layers import Input # Input layer for a neural network

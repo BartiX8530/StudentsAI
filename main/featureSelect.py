@@ -7,7 +7,7 @@ from mlxtend.feature_selection import SequentialFeatureSelector as SFS  # Sequen
 # The project uses a linear regression model for feature selection and a neural network model for prediction
 # this is to save time and resources as the neural network model is computationally expensive
 
-# Load your dataset and define the training data and target column
+# Load your dataset
 data = pd.read_csv('./data.csv')
 X = data.drop(['GradeClass', 'StudentID', 'GPA'], axis=1)  # training data without columns that shouldn't be evaluated
 y = data['GPA']  # target column
