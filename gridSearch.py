@@ -14,7 +14,7 @@ import numpy as np
 # The parameters used and their values are defined in the param_grid dictionary
 
 # Load your dataset
-data = pd.read_csv('./data.csv')
+data = pd.read_csv('data.csv')
 X = data.drop(['GradeClass', 'StudentID', 'GPA'], axis=1)  # training data without columns that shouldn't be evaluated
 y = data['GPA']  # target column
 

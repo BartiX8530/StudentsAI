@@ -21,7 +21,7 @@ from tensorflow.keras.models import load_model
 model = load_model('finishedmodel_037671.keras')
 
 # load the input data
-data = pd.read_csv('./data.csv')
+data = pd.read_csv('data.csv')
 
 # leave only columns that are used in the model
 selected_features = ['StudyTimeWeekly', 'Absences', 'Tutoring', 'ParentalSupport', 'Extracurricular', 'Sports', 'Music']

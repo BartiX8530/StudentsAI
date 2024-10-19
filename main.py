@@ -31,7 +31,7 @@ import shap # SHAP is a game theoretic approach to explain the output of machine
 from modelBuildUtil import build_model # This helps us change and modify the model easily
 
 # Load your dataset
-data = pd.read_csv('./data.csv')
+data = pd.read_csv('data.csv')
 X = data.drop(['GradeClass', 'StudentID', 'GPA'], axis=1)  # training data without columns that shouldn't be evaluated
 y = data['GPA']  # target column
 
