@@ -13,6 +13,7 @@ from tensorflow.keras.layers import Dense  # Create a densely-connected neural n
 from tensorflow.keras.regularizers import l2  # Apply L2 regularization to neural network weights
 from tensorflow.python.keras.callbacks import EarlyStopping
 from modelBuildUtil import build_model # This helps us change and modify the model easily
+from sklearn.ensemble import RandomForestRegressor  # Import Random Forest Regressor
 
 # Load your dataset
 data = pd.read_csv('data.csv')
@@ -100,6 +101,14 @@ dt.fit(X_train_selected, y_train)
 y_pred_dt = dt.predict(X_test_selected)
 mse_dt = mean_squared_error(y_test, y_pred_dt)
 
+# Baseline Random Forest model
+rf = RandomForestRegressor()
+rf.fit(X_train_selected, y_train)
+
+# Evaluating the Random Forest model
+y_pred_rf = rf.predict(X_test_selected)
+mse_rf = mean_squared_error(y_test, y_pred_rf)
+
 # Print out the evaluations of the models, features selected by SFS, and feature importances
 print(f'Selected features: {selected_features}')
 feature_importances = pd.DataFrame({
@@ -109,3 +118,4 @@ feature_importances = pd.DataFrame({
 print(f'Neural Network Mean Squared Error: {mse_nn}')
 print(f'Baseline Linear Regression Mean Squared Error: {mse_baseline}')
 print(f'Baseline Decision Tree Mean Squared Error: {mse_dt}')
+print(f'Baseline Random Forest Mean Squared Error: {mse_rf}')
