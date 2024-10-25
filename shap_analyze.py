@@ -13,9 +13,9 @@ from tensorflow.keras.regularizers import l2  # Apply L2 regularization to neura
 from tensorflow.keras.callbacks import EarlyStopping  # Implement early stopping for neural network training
 import shap  # SHAP is a game theoretic approach to explain the output of machine learning models
 from tensorflow.keras.models import load_model
+import matplotlib.pyplot as plt
 
-#                   This script is used to analyze the SHAP values of the model
-#
+#                   This script is basically used to analyze the SHAP values of the model
 
 # import the model from a .keras file
 model = load_model('finishedmodel_037671.keras')
@@ -73,15 +73,20 @@ reshaped_shap_values = np.squeeze(reshaped_shap_values)  # Shape (1000, 7)
 single_shap_values = reshaped_shap_values[0]  # SHAP values for the first instance (shape (7,))
 single_data = random_X_test[0]  # Feature values for the first instance (shape (7,))
 
-# Plot the SHAP waterfall plot for the first instance
+# Create SHAP waterfall plot
 shap.waterfall_plot(
     shap.Explanation(
         values=single_shap_values,  # SHAP values for a single instance
         base_values=base_value,  # Base value should be a scalar
         data=single_data,  # Corresponding feature values
         feature_names=selected_features  # Ensure correct feature names
-    )
+    ),
+    max_display=len(selected_features),  # To display all features, or set to a fixed number
+    show=False  # To display the plot in the notebook
 )
+
+plt.tight_layout()
+plt.show()
 
 # Ask the user what features they would like a dependence plot for
 chosen_feature_names = input(
