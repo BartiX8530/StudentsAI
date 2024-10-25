@@ -36,7 +36,7 @@ X_scaled = scaler.transform(X)
 print("Selected features:", selected_features)
 
 # Create a SHAP (Deep)explainer
-background = X_scaled[np.random.choice(X_scaled.shape[0], 100, replace=False)]
+background = X_scaled[np.random.choice(X_scaled.shape[0], 1000, replace=False)]
 explainer = shap.DeepExplainer(model, background)
 
 # Compute SHAP values for the test data
@@ -44,7 +44,7 @@ shap_values = explainer.shap_values(X_scaled)
 
 correct_shap_values = shap_values[1]
 
-random_X_test = X_scaled[np.random.choice(X_scaled.shape[0], 100, replace=False)]
+random_X_test = X_scaled[np.random.choice(X_scaled.shape[0], 1000, replace=False)]
 
 print("Shape of SHAP values:", np.array(correct_shap_values).shape)
 print("Shape of features:", random_X_test.shape)
@@ -61,6 +61,27 @@ print("Reshaped SHAP values shape:", reshaped_shap_values.shape)
 
 # Attempt to plot with the reshaped SHAP values
 shap.summary_plot(reshaped_shap_values, random_X_test, feature_names=selected_features)
+
+# Force plot for a single prediction (e.g., the first instance in the test set)
+# shap.force_plot(explainer.expected_value, reshaped_shap_values, random_X_test[0])
+
+# Ensure SHAP values are correctly shaped and base value is a scalar
+base_value = explainer.expected_value.numpy()[0]  # Convert tensor to scalar
+reshaped_shap_values = np.squeeze(reshaped_shap_values)  # Shape (1000, 7)
+
+# Select SHAP values and feature values for the first instance (adjust index as needed)
+single_shap_values = reshaped_shap_values[0]  # SHAP values for the first instance (shape (7,))
+single_data = random_X_test[0]  # Feature values for the first instance (shape (7,))
+
+# Plot the SHAP waterfall plot for the first instance
+shap.waterfall_plot(
+    shap.Explanation(
+        values=single_shap_values,  # SHAP values for a single instance
+        base_values=base_value,  # Base value should be a scalar
+        data=single_data,  # Corresponding feature values
+        feature_names=selected_features  # Ensure correct feature names
+    )
+)
 
 # Ask the user what features they would like a dependence plot for
 chosen_feature_names = input(

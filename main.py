@@ -31,7 +31,7 @@ import shap # SHAP is a game theoretic approach to explain the output of machine
 from modelBuildUtil import build_model # This helps us change and modify the model easily
 
 # Load your dataset
-data = pd.read_csv('./data.csv')
+data = pd.read_csv('data.csv')
 X = data.drop(['GradeClass', 'StudentID', 'GPA'], axis=1)  # training data without columns that shouldn't be evaluated
 y = data['GPA']  # target column
 
@@ -161,7 +161,7 @@ if analyze_model.lower() in ['y', 'ye', 'yes']:
     print("Selected features:", list(X_train_selected.columns))
 
     # Create a SHAP (Deep)explainer
-    background = X_train_scaled[np.random.choice(X_train_scaled.shape[0], 100, replace=False)]
+    background = X_train_scaled[np.random.choice(X_train_scaled.shape[0], 1000, replace=False)]
     explainer = shap.DeepExplainer(model, background)
 
     # Compute SHAP values for the test data
@@ -169,7 +169,7 @@ if analyze_model.lower() in ['y', 'ye', 'yes']:
 
     correct_shap_values = shap_values[1]
 
-    random_X_test = X_test_scaled[np.random.choice(X_test_scaled.shape[0], 100, replace=False)]
+    random_X_test = X_test_scaled[np.random.choice(X_test_scaled.shape[0], 1000, replace=False)]
 
     print("Shape of SHAP values:", np.array(correct_shap_values).shape)
     print("Shape of features:", random_X_test.shape)
