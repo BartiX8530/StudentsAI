@@ -14,4 +14,8 @@ checked models.py - other models that have been checked for results (not expande
 
 modelBuildUtil.py - used in other files to build a model with parameters specified in a directionary
 
+featureSelect.py - performs feature selection standalone on a linear regression model
+
+featureSelectRF.py - performs feature selection standalone on a random forest model
+
 There is a finished model included, with quite good performance
