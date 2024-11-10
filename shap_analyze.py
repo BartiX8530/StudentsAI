@@ -1,5 +1,6 @@
 import pandas as pd  # Data manipulation and analysis
 import numpy as np  # Scientific computing with support for arrays and matrices
+from fontTools.varLib.instancer.solver import EPSILON
 from sklearn.model_selection import train_test_split  # Split dataset into training and testing sets
 from sklearn.linear_model import LinearRegression  # Perform linear regression
 from mlxtend.feature_selection import SequentialFeatureSelector as SFS  # Sequential feature selection
@@ -14,6 +15,7 @@ from tensorflow.keras.callbacks import EarlyStopping  # Implement early stopping
 import shap  # SHAP is a game theoretic approach to explain the output of machine learning models
 from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score # Calculate the accuracy of the model
 
 #                   This script is basically used to analyze the SHAP values of the model
 
@@ -39,21 +41,60 @@ print("Selected features:", selected_features)
 background = X_scaled[np.random.choice(X_scaled.shape[0], 1000, replace=False)]
 explainer = shap.DeepExplainer(model, background)
 
-# Compute SHAP values for the test data
-shap_values = explainer.shap_values(X_scaled)
-
-correct_shap_values = shap_values[1]
-
 random_X_test = X_scaled[np.random.choice(X_scaled.shape[0], 1000, replace=False)]
 
-print("Shape of SHAP values:", np.array(correct_shap_values).shape)
+# Calculate the mse of the model
+y_pred = model.predict(X_scaled)
+mse = mean_squared_error(y, y_pred)
+print("Mean Squared Error:", mse)
+
+# Calculate the rmse of the model
+rmse = np.sqrt(mse)
+print("Root Mean Squared Error:", rmse)
+
+# Ensure y and y_pred are 1-dimensional and convert y to a NumPy array
+y = np.squeeze(y.values)
+y_pred = np.squeeze(y_pred)
+
+rmsle = np.sqrt(np.mean(np.square(np.log1p(y_pred + EPSILON) - np.log1p(y + EPSILON))))
+print("Root Mean Squared Logarithmic Error:", rmsle)
+
+# Convert RMSLE to multiplicative error
+multiplicative_error = np.exp(rmsle) - 1
+
+# Convert to a percentage error
+percentage_error = multiplicative_error * 100
+
+print(f"Approximate Relative Percantage Error from RMSE: {rmse / np.mean(y) * 100:.4f}%")
+
+print(f"Approximate Relative Percentage Error from RMSLE: {percentage_error:.4f}%")
+
+smape = np.mean(np.abs(y - y_pred) / ((np.abs(y) + np.abs(y_pred)) / 2)) * 100
+print(f"Symmetric Mean Absolute Percentage Error:{smape:.4f}%")
+
+print("Something weird happens next, because some y values are almost 0 and the metrics are incorrectly calculated.")
+
+# Print the minimum and maximum values of y and y_pred for debugging
+print("Min value of y:", np.min(y))
+print("Max value of y:", np.max(y))
+print("Min value of y_pred:", np.min(y_pred))
+print("Max value of y_pred:", np.max(y_pred))
+
+# Calculate the RMSPE of the model
+rmspe = (np.sqrt(np.mean(np.square((y - y_pred) / (y + EPSILON))))) * 100
+print("Root Mean Squared Percentage Error:", rmspe)
+
+mape = np.mean(np.abs((y - y_pred) / (y + EPSILON))) * 100
+print("Mean Absolute Percentage Error:", mape)
+
+print("Shape of SHAP values:", np.array(random_X_test).shape)
 print("Shape of features:", random_X_test.shape)
 
 shap_values_output = explainer.shap_values(random_X_test)
 
 # Ensure SHAP values are in the correct format
-if isinstance(shap_values, list):
-    correct_shap_values = shap_values_output[0]
+# if isinstance(shap_values, list):
+#     correct_shap_values = shap_values_output[0]
 
 reshaped_shap_values = np.concatenate([np.array(vals).reshape(1, -1) for vals in shap_values_output], axis=0)
 
